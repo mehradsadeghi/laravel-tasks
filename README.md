@@ -46,8 +46,8 @@ tempTags($task)->unTag('complete');
 We fetch the 'complete' and 'incomplete' tasks like this:
 
 ```php
-Task::hasActiveTempTags('complete')->get();    // tasks which has tag
-Task::hasNotActiveTempTags('complete')->get(); // tasks no tag
+Task::hasActiveTempTags('complete')->get();    // tasks with "complete" tag.
+Task::hasNotActiveTempTags('complete')->get(); // tasks with no tag are incomplete ones.
 
 ```
 
