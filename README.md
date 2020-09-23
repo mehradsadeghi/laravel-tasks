@@ -26,6 +26,9 @@ email: bye@example.com    pass: secret
 
 ---
 
+![image](https://user-images.githubusercontent.com/6961695/94007123-cdac1d80-fdad-11ea-9e51-bc388bd2dff8.png)
+
+
 ### Long Story Short:
 
 We Tag the tasks as 'complete' until the end of the day:
