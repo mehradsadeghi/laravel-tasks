@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class TasksController extends Controller
@@ -22,13 +21,15 @@ class TasksController extends Controller
 
     public function index()
     {
+        $uid = auth()->id();
+
         return view('tasks.index', [
-            'tasks' => $this->tasksOfUser(auth()->id())->get(),
-            'tasksComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'done'])->get(),
-            'tasksInComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'not_started'])->get(),
-            'tasksDoing' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'doing'])->get(),
-            'tasksFailed' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'failed'])->get(),
-            'tasksWont_do' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'wont_do'])->get(),
+            'tasks' => $this->tasksOfUser($uid)->get(),
+            'tasksComplete' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'done'])->get(),
+            'tasksInComplete' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'not_started'])->get(),
+            'tasksDoing' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'doing'])->get(),
+            'tasksFailed' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'failed'])->get(),
+            'tasksWont_do' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'wont_do'])->get(),
         ]);
     }
 
@@ -43,13 +44,16 @@ class TasksController extends Controller
         $validData['user_id'] = auth()->id();
 
         $task = Task::query()->create($validData);
-        $this->tagTaskCompletion('not_started', $task);
+
+        // By default we tag the tasks as non-started.
+        $this->tagTaskState('not_started', $task);
 
         return redirect('/tasks')->with('success', 'Task created');
     }
 
     public function edit($id)
     {
+        // users should not be able to edit or see each others tasks.
         $task = $this->tasksOfUser(auth()->id())->findOrFail($id);
 
         return view('tasks.edit', compact('task'));
@@ -61,14 +65,16 @@ class TasksController extends Controller
 
         $task = $this->saveTask($id, $validData);
 
-        $this->tagTaskCompletion(request('state'), $task);
+        $this->tagTaskState(request('state'), $task);
 
         return redirect('tasks')->with('success', 'Task Updated');
     }
 
     public function destroy($id)
     {
-        $this->tasksOfUser(auth()->id())->findOrFail($id)->delete();
+        $task = $this->tasksOfUser(auth()->id())->findOrFail($id);
+        $task->unTag();
+        $task->delete();
 
         return redirect('/tasks')->with('success', 'Task Deleted');
     }
@@ -86,7 +92,7 @@ class TasksController extends Controller
         return $task;
     }
 
-    private function tagTaskCompletion($completion, $task)
+    private function tagTaskState($completion, $task)
     {
         $expireAt = Carbon::now()->endOfDay();
         tempTags($task)->tagIt('state', $expireAt, ['value' => $completion]);
