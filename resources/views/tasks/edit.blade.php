@@ -20,7 +20,7 @@
                             <div class="form-group row">
                                 {!! Form::label('name', 'Task Name', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::text('name', null, array('class' => 'form-control')) !!}
+                                    {!! Form::text('name', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
                                 </div>
                             </div>
 
@@ -28,7 +28,7 @@
                             <div class="form-group row">
                                 {!! Form::label('description', 'Task Description', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::textarea('description', null, array('class' => 'form-control')) !!}
+                                    {!! Form::textarea('description', null, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
                                 </div>
                             </div>
 
@@ -38,13 +38,21 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Status</label>
                                 <div class="col-sm-6">
-                                    <div class="checkbox">
+                                    <div class="select">
                                         <label for="status">
-                                            {!! Form::checkbox('completed', 1, tempTags($task)->getActiveTag('complete'), ['id' => 'status']) !!} Complete
+
+                                            {!! Form::select('state',
+                                            [
+                                                'not_started' => 'Not Started',
+                                                'done' => 'Done   :)',
+                                                'doing' => 'Doing...',
+                                                'failed' => 'Failed   :(',
+                                                'wont_do' => 'will not try  :|',
+                                            ],  tempTags($task)->getActiveTag('state')->getPayload('value'), ['class' => 'form-control']) !!}
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div>{!! tempTags($task)->getActiveTag('state')->getPayload('value') !!}
 
 
                             <!-- Add Task Button -->

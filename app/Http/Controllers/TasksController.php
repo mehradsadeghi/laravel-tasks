@@ -8,13 +8,12 @@ use Illuminate\Support\Carbon;
 
 class TasksController extends Controller
 {
-    const completeTag = 'complete';
-
     protected $rules = [
         'name' 		  => 'required|max:60',
         'description' => 'max:155',
-        'completed'   => 'in:0,1',
     ];
+
+    const stateRule = 'in:not_started,done,doing,failed,wont_do';
 
     public function __construct()
     {
@@ -25,8 +24,11 @@ class TasksController extends Controller
     {
         return view('tasks.index', [
             'tasks' => $this->tasksOfUser(auth()->id())->get(),
-            'tasksComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags(self::completeTag)->get(),
-            'tasksInComplete' => $this->tasksOfUser(auth()->id())->hasNotActiveTempTags(self::completeTag)->get(),
+            'tasksComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'done'])->get(),
+            'tasksInComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'not_started'])->get(),
+            'tasksDoing' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'doing'])->get(),
+            'tasksFailed' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'failed'])->get(),
+            'tasksWont_do' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'wont_do'])->get(),
         ]);
     }
 
@@ -35,11 +37,13 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
-    public function store(Request $request)
+    public function store()
     {
-        $validData = $this->validate($request, $this->rules);
+        $validData = $this->validate(request(), $this->rules);
         $validData['user_id'] = auth()->id();
-        Task::query()->create($validData);
+
+        $task = Task::query()->create($validData);
+        $this->tagTaskCompletion('not_started', $task);
 
         return redirect('/tasks')->with('success', 'Task created');
     }
@@ -51,13 +55,13 @@ class TasksController extends Controller
         return view('tasks.edit', compact('task'));
     }
 
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        $request = $this->validate($request, $this->rules);
+        $validData = $this->validate(request(), ['state' => self::stateRule]);
 
-        $task = $this->saveTask($id, $request);
+        $task = $this->saveTask($id, $validData);
 
-        $this->tagTaskCompletion(request('completed'), $task);
+        $this->tagTaskCompletion(request('state'), $task);
 
         return redirect('tasks')->with('success', 'Task Updated');
     }
@@ -82,13 +86,9 @@ class TasksController extends Controller
         return $task;
     }
 
-    private function tagTaskCompletion($completion, $task): void
+    private function tagTaskCompletion($completion, $task)
     {
-        if ($completion == '1') {
-            $expireAt = Carbon::now()->endOfDay();
-            tempTags($task)->tagIt(self::completeTag, $expireAt);
-        } else {
-            tempTags($task)->unTag(self::completeTag);
-        }
+        $expireAt = Carbon::now()->endOfDay();
+        tempTags($task)->tagIt('state', $expireAt, ['value' => $completion]);
     }
 }

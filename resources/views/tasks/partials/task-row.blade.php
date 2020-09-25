@@ -17,21 +17,9 @@
 
     <!-- Task Status -->
     <td>
-
-        @if (tempTags($task)->getActiveTag('complete'))
-
-            <span class="label label-success">
-                Complete
-            </span>
-
-        @else
-
             <span class="label label-default">
-                Incomplete
+                {!! tempTags($task)->getActiveTag('state')->getPayload('value') ?? '' !!}
             </span>
-
-        @endif
-
     </td>
 
     <!-- Task Status Checkbox -->
