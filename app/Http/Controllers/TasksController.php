@@ -24,11 +24,11 @@ class TasksController extends Controller
     {
         return view('tasks.index', [
             'tasks' => $this->tasksOfUser(auth()->id())->get(),
-            'tasksComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'done'])->get(),
-            'tasksInComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'not_started'])->get(),
-            'tasksDoing' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'doing'])->get(),
-            'tasksFailed' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'failed'])->get(),
-            'tasksWont_do' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value', 'wont_do'])->get(),
+            'tasksComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'done'])->get(),
+            'tasksInComplete' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'not_started'])->get(),
+            'tasksDoing' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'doing'])->get(),
+            'tasksFailed' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'failed'])->get(),
+            'tasksWont_do' => $this->tasksOfUser(auth()->id())->hasActiveTempTags('state', ['value' => 'wont_do'])->get(),
         ]);
     }
 

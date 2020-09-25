@@ -45,19 +45,21 @@ class Install extends Command
             'description' => 'The cats get hungry every day.',
         ]);
 
-        tempTags($task1)->tagIt('complete', Carbon::tomorrow()->startOfDay());
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'done']);
 
-        Task::query()->firstOrCreate([
+        $task1 = Task::query()->firstOrCreate([
             'name' => 'reading book',
             'user_id' => $user->getKey(),
             'description' => 'increase your knowledge.',
         ]);
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'wont_do']);
 
-        Task::query()->firstOrCreate([
+        $task1 = Task::query()->firstOrCreate([
             'name' => 'exercise out doors',
             'user_id' => $user->getKey(),
             'description' => 'Take care of health.',
         ]);
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'wont_do']);
 
         $user = User::query()->firstOrCreate([
             'name' => 'bye',
@@ -70,20 +72,23 @@ class Install extends Command
             'description' => 'The dogs get hungry every day.',
         ]);
 
-        tempTags($task1)->tagIt('complete', Carbon::tomorrow()->startOfDay());
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'done']);
 
         Task::query()->firstOrCreate([
             'name' => 'reading newslatter',
             'user_id' => $user->getKey(),
             'description' => 'increase your knowledge.',
         ]);
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'not_started']);
 
 
-        Task::query()->firstOrCreate([
+        $task1 = Task::query()->firstOrCreate([
             'name' => 'exercise in doors',
             'user_id' => $user->getKey(),
             'description' => 'Take care of health.',
         ]);
+
+        tempTags($task1)->tagIt('status', Carbon::tomorrow()->startOfDay(), ['value' => 'failed']);
 
         $this->info('We migrated and seeded the db with some users and tasks.  \(^_^)/');
         $this->info('You can now login     email: bye@example.com    password: secret');
