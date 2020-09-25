@@ -2,7 +2,7 @@
 
 Laravel 8 with user authentication, password recovery, and individual user tasks lists.
 
-This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-task as done, it will automatically return back to in-complete state at the end of the day.
+This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-task as `done`, `failed`, `skipped`, etc and they will be automatically rollback to the default  (`not started`) state at the end of the day. (without using any cron job)
 
 Super easy setup, can be done in 5 minutes or less.
 
@@ -37,19 +37,19 @@ We Tag the tasks as 'complete' until the end of the day:
 
 ```php
 $expireAt = Carbon::now()->endOfDay();   // 23:59:59 of today
-tempTags($task)->tagIt('complete', $expireAt);
+tempTags($task)->tagIt('state', $expireAt, ['value' => 'done']);
 ```
 
 We remove the tag from the task when the user marks it as in-complete:
 ```php
-tempTags($task)->unTag('complete');
+tempTags($task)->unTag('state');
 ```
 
 We fetch the 'complete' and 'incomplete' tasks like this:
 
 ```php
-Task::hasActiveTempTags('complete')->get();    // tasks with "complete" tag.
-Task::hasNotActiveTempTags('complete')->get(); // tasks with no tag are incomplete ones.
+Task::hasActiveTempTags('state', ['value' => 'done'])->get();           // tasks with "complete" tag.
+Task::hasNotActiveTempTags('state', ['value' => 'not_started'])->get(); // tasks with no tag are incomplete ones.
 
 ```
 
