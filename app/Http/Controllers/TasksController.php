@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Task;
 use Illuminate\Support\Carbon;
+use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TasksController extends Controller
 {
+    use AuthorizesRequests,  ValidatesRequests;
+
     protected $rules = [
         'name' 		  => 'required|max:60',
         'description' => 'max:155',
@@ -19,17 +24,28 @@ class TasksController extends Controller
         $this->middleware('auth');
     }
 
+    public function home()
+    {
+        return view('home');
+    }
+
     public function index()
     {
         $uid = auth()->id();
 
         return view('tasks.index', [
             'tasks' => $this->tasksOfUser($uid)->get(),
-            'tasksComplete' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'done'])->get(),
-            'tasksInComplete' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'not_started'])->get(),
-            'tasksDoing' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'doing'])->get(),
-            'tasksFailed' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'failed'])->get(),
-            'tasksWont_do' => $this->tasksOfUser($uid)->hasActiveTempTags('state', ['value' => 'wont_do'])->get(),
+            'tasksComplete' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'done'])->get(),
+            'tasksInComplete' => $this->tasksOfUser($uid)
+                ->where(function ($q) {
+                    $q->hasActiveTags('state', ['value' => 'not_started'])
+                        // this is for yesterday tasks with expired tags which are considered to be not_started for today.
+                        ->orHasNotActiveTags('state');
+                })
+                ->get(),
+            'tasksDoing' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'doing'])->get(),
+            'tasksFailed' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'failed'])->get(),
+            'tasksWont_do' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'wont_do'])->get(),
         ]);
     }
 

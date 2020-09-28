@@ -18,7 +18,7 @@
     <!-- Task Status -->
     <td>
             <span class="label label-default">
-                {!! tempTags($task)->getActiveTag('state')->getPayload('value') ?? '' !!}
+                {!! tempTags($task)->getActiveTag('state')->getPayload('value') ?? 'not_started' !!}
             </span>
     </td>
 
