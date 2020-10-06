@@ -48,11 +48,11 @@
                                                 'doing' => 'Doing...',
                                                 'failed' => 'Failed   :(',
                                                 'wont_do' => 'will not try  :|',
-                                            ],  tempTags($task)->getActiveTag('state')->getPayload('value'), ['class' => 'form-control']) !!}
+                                            ],  optional(tempTags($task)->getActiveTag('state'))->getPayload('value'), ['class' => 'form-control']) !!}
                                         </label>
                                     </div>
                                 </div>
-                            </div>{!! tempTags($task)->getActiveTag('state')->getPayload('value') !!}
+                            </div>
 
 
                             <!-- Add Task Button -->

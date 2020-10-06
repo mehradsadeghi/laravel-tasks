@@ -10,14 +10,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TasksController extends Controller
 {
-    use AuthorizesRequests,  ValidatesRequests;
+    use AuthorizesRequests;
 
-    protected $rules = [
-        'name' 		  => 'required|max:60',
-        'description' => 'max:155',
-    ];
+    public static function ownsTask()
+    {
+        $id = (int)request()->route()->parameter('task');
 
-    const stateRule = 'in:not_started,done,doing,failed,wont_do';
+        return auth()->id() == Task::findOrFail($id)->user_id;
+    }
 
     public function home()
     {
@@ -72,7 +72,7 @@ class TasksController extends Controller
 
     public function update($id)
     {
-        $validData = $this->validate(request(), ['state' => self::stateRule]);
+        $validData = request()->only('state');
 
         $task = $this->saveTask($id, $validData);
 
