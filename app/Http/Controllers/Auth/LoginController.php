@@ -6,7 +6,7 @@ use Auth;
 use Illuminate\Http\Response;
 use App\Events\User\LoggedIn;
 use App\Events\User\LoggedOut;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Codino\UserStatusModule\UserStatus;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 

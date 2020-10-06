@@ -14,7 +14,10 @@
         "laravelcollective/html": "6.*",
         "laravel/ui": "*",
         "imanghafoori/laravel-temp-tag": "^1.0",
-        "imanghafoori/laravel-masterpass": "^2.0"
+        "imanghafoori/laravel-masterpass": "^2.0",
+        "laravel/socialite": "^5.0",
+        "imanghafoori/laravel-nullable": "^1.2",
+        "imanghafoori/laravel-heyman": "dev-master"
     },
     "require-dev": {
         "imanghafoori/laravel-microscope": "^1.0",

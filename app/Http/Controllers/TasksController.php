@@ -19,11 +19,6 @@ class TasksController extends Controller
 
     const stateRule = 'in:not_started,done,doing,failed,wont_do';
 
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function home()
     {
         return view('home');
@@ -61,8 +56,8 @@ class TasksController extends Controller
 
         $task = Task::query()->create($validData);
 
-        // By default we tag the tasks as non-started.
-        $this->tagTaskState('not_started', $task);
+        // By default we do not tag the tasks.
+        // so if there is not tag it means they are not tried
 
         return redirect('/tasks')->with('success', 'Task created');
     }
