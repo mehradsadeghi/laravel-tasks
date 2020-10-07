@@ -51,10 +51,11 @@ class TasksController extends Controller
 
     public function store()
     {
-        $validData = $this->validate(request(), $this->rules);
-        $validData['user_id'] = auth()->id();
+        // validation: routes/validators.php
+        $data = request()->only(['name', 'description']);
+        $data['user_id'] = auth()->id();
 
-        $task = Task::query()->create($validData);
+        $task = Task::query()->create($data);
 
         // By default we do not tag the tasks.
         // so if there is not tag it means they are not tried
@@ -72,6 +73,7 @@ class TasksController extends Controller
 
     public function update($id)
     {
+        // validation: routes/validators.php
         $validData = request()->only('state');
 
         $task = $this->saveTask($id, $validData);
