@@ -26,21 +26,21 @@ class TasksController extends Controller
 
     public function index()
     {
-        $uid = auth()->id();
+        $userId = auth()->id();
 
         return view('tasks.index', [
-            'tasks' => $this->tasksOfUser($uid)->get(),
-            'tasksComplete' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'done'])->get(),
-            'tasksInComplete' => $this->tasksOfUser($uid)
+            'tasks' => $this->tasksOfUser($userId)->get(),
+            'tasksComplete' =>  $this->getTasksWithTag($userId, 'done'),
+            'tasksInComplete' => $this->tasksOfUser($userId)
                 ->where(function ($q) {
                     $q->hasActiveTags('state', ['value' => 'not_started'])
                         // this is for yesterday tasks with expired tags which are considered to be not_started for today.
                         ->orHasNotActiveTags('state');
                 })
                 ->get(),
-            'tasksDoing' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'doing'])->get(),
-            'tasksFailed' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'failed'])->get(),
-            'tasksWont_do' => $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => 'wont_do'])->get(),
+            'tasksDoing' =>  $this->getTasksWithTag($userId, 'doing'),
+            'tasksFailed' =>  $this->getTasksWithTag($userId, 'failed'),
+            'tasksWont_do' => $this->getTasksWithTag($userId, 'wont_do'),
         ]);
     }
 
@@ -107,5 +107,10 @@ class TasksController extends Controller
     {
         $expireAt = Carbon::now()->endOfDay();
         tempTags($task)->tagIt('state', $expireAt, ['value' => $completion]);
+    }
+
+    private function getTasksWithTag($uid, string $tag)
+    {
+        return $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => $tag])->get();
     }
 }

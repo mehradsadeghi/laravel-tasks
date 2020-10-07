@@ -1,21 +1,11 @@
 <tr>
 
-    <!-- Task Id -->
-    <td class="table-text">
-        {{ $task->id }}
-    </td>
+    <td class="table-text">{{ $task->id }}</td>
 
-    <!-- Task Name -->
-    <td class="table-text">
-        {{ $task->name }}
-    </td>
+    <td class="table-text">{{ $task->name }}</td>
 
-    <!-- Task Description -->
-    <td>
-        {{ $task->description }}
-    </td>
+    <td>{{ $task->description }}</td>
 
-    <!-- Task Status -->
     <td>
             <span class="label label-default">
                 {!! optional(tempTags($task)->getActiveTag('state'))->getPayload('value') ?? 'not_started' !!}
@@ -23,9 +13,7 @@
     </td>
 
     <!-- Task Status Checkbox -->
-    <td>
-
-    </td>
+    <td></td>
 
     <!-- Task Edit Icon -->
     <td>
