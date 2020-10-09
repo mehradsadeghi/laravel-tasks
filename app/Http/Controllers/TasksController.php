@@ -5,19 +5,11 @@ namespace App\Http\Controllers;
 use App\Task;
 use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TasksController extends Controller
 {
     use AuthorizesRequests;
-
-    public static function ownsTask()
-    {
-        $id = (int)request()->route()->parameter('task');
-
-        return auth()->id() == Task::findOrFail($id)->user_id;
-    }
 
     public function home()
     {
@@ -30,7 +22,7 @@ class TasksController extends Controller
 
         return view('tasks.index', [
             'tasks' => $this->tasksOfUser($userId)->get(),
-            'tasksComplete' =>  $this->getTasksWithTag($userId, 'done'),
+            'tasksComplete' => $this->getTasksWithTag($userId, 'done'),
             'tasksInComplete' => $this->tasksOfUser($userId)
                 ->where(function ($q) {
                     $q->hasActiveTags('state', ['value' => 'not_started'])
@@ -38,8 +30,8 @@ class TasksController extends Controller
                         ->orHasNotActiveTags('state');
                 })
                 ->get(),
-            'tasksDoing' =>  $this->getTasksWithTag($userId, 'doing'),
-            'tasksFailed' =>  $this->getTasksWithTag($userId, 'failed'),
+            'tasksDoing' => $this->getTasksWithTag($userId, 'doing'),
+            'tasksFailed' => $this->getTasksWithTag($userId, 'failed'),
             'tasksWont_do' => $this->getTasksWithTag($userId, 'wont_do'),
         ]);
     }
@@ -66,7 +58,7 @@ class TasksController extends Controller
     public function edit($id)
     {
         // users should not be able to edit or see each others tasks.
-        $task = $this->tasksOfUser(auth()->id())->findOrFail($id);
+        $task = Task::query()->find($id);
 
         return view('tasks.edit', compact('task'));
     }
@@ -85,7 +77,7 @@ class TasksController extends Controller
 
     public function destroy($id)
     {
-        $task = $this->tasksOfUser(auth()->id())->findOrFail($id);
+        $task = Task::query()->find($id);
         $task->unTag();
         $task->delete();
 
@@ -99,7 +91,8 @@ class TasksController extends Controller
 
     private function saveTask(int $taskId, $data)
     {
-        $task = $this->tasksOfUser(auth()->id())->findOrFail($taskId);
+        $task = Task::query()->findOrFail($taskId);
+
         $task->fill($data)->save();
 
         return $task;
