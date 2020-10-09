@@ -7,7 +7,6 @@ HeyMan::onRoute('tasks.store')->validate([
     'description' => 'max:155',
 ]);
 
-
 HeyMan::onRoute('tasks.update')->validate([
     'state' => 'required|in:not_started,done,doing,failed,wont_do'
 ]);

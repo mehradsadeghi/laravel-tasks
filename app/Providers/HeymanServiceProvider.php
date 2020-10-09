@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\InvalidTaskIdBehavior;
 use App\Policies\TaskPolicy;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Log;
+use App\TamperWithOthersTasks;
 use Imanghafoori\HeyMan\Facades\HeyMan;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class HeymanServiceProvider extends ServiceProvider
 {
@@ -45,25 +45,15 @@ class HeymanServiceProvider extends ServiceProvider
 
     private function preventTamperingOtherUsersTasks()
     {
-        $logger = function () {
-            Log::alert('someone tried to access a others tasks!', [
-                'user_id' => auth()->id(),
-                'route' => request()->route()->getName(),
-                'task_id' => request()->route()->parameter('task')
-            ]);
-
-            event('tamperWithOthersTasks');
-        };
-
         HeyMan::onRoute([
             'tasks.delete',
             'tasks.update',
             'tasks.edit',
         ])->thisMethodShouldAllow([TaskPolicy::class, 'ownsTask'])
             ->otherwise()
-            ->afterCalling($logger)
-            ->redirect()->back()
-            ->withErrors('Tampering with url data will result in a temporary ban.');
+            ->afterCalling([TamperWithOthersTasks::class, 'reaction'])
+            ->afterFiringEvent('tamperWithOthersTasks')
+            ->weRespondFrom([TamperWithOthersTasks::class, 'response']);
     }
 
     private function ensureTaskIdIsValid()

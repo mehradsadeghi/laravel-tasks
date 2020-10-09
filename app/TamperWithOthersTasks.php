@@ -4,18 +4,18 @@ namespace App;
 
 use Illuminate\Support\Facades\Log;
 
-class InvalidTaskIdBehavior
+class TamperWithOthersTasks
 {
-    public static function reaction()
+    static function reaction()
     {
-        Log::alert('Someone tried to access a non-existing task!', [
+        Log::alert('someone tried to access others tasks!', [
             'user_id' => auth()->id(),
             'route' => request()->route()->getName(),
             'task_id' => request()->route()->parameter('task')
         ]);
     }
 
-    public static function response()
+    static function response()
     {
         return redirect()
             ->back()
