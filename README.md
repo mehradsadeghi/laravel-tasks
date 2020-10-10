@@ -6,6 +6,12 @@ This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-t
 
 Super easy setup, can be done in 5 minutes or less.
 
+### Features:
+- Users get banned for 2 minutes if they tamper with task ids in url.
+- No user can have to than 10 daily tasks.
+- It logs any validation errors and tampering with url parameters.
+
+
 ### Quick Project Setup
 1. Run `sudo git clone https://github.com/imanghafoori1/laravel-tasks.git laravel-tasks`
 2. From the projects root run `cp .env.example .env`
