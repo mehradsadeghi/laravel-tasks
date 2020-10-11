@@ -60,7 +60,7 @@ class TasksController extends Controller
         // users should not be able to edit or see each others tasks.
         $task = Task::query()->find($id);
 
-        return view('tasks.edit', compact('task'));
+        return compact('task');
     }
 
     public function update($id)

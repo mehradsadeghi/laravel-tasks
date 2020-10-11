@@ -1,10 +1,26 @@
 <?php
 
+use App\Task\TaskIdIsValid;
+use App\Task\UserOwnsTask;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TasksController;
 
 Route::view('/', 'welcome');
 Route::view('/home', 'home')->middleware('auth');
-Route::resource('/tasks', 'TasksController');
+
+
+Route::get('tasks', [TasksController::class, 'index'])->name('tasks.index');
+Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.create');
+Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
+
+
+Route:: middleware(['auth', TaskIdIsValid::class, UserOwnsTask::class,])->
+    get('tasks/{task}/edit', [TasksController::class, 'edit'])
+    ->middleware(['view:tasks.edit'])
+    ->name('tasks.edit');
+
+Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
+Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
 
 
 ###########        Authentication routes:        ###########

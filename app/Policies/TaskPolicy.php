@@ -22,6 +22,6 @@ class TaskPolicy
     {
         $id = (int) request()->route()->parameter('task');
 
-        return (bool) Task::query()->find($id);
+        return is_numeric($id) && (bool) Task::query()->find($id);
     }
 }

@@ -6,7 +6,7 @@ class BanManager
 {
     public static function isNotBanned()
     {
-        return (bool) ! tempTags(auth()->user())->getActiveTag('banned');
+        return !((bool) tempTags(auth()->user())->getActiveTag('banned'));
     }
 
     public static function banUser($minute, $reason)

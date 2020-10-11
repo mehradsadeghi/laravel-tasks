@@ -19,7 +19,7 @@ class HeymanServiceProvider extends ServiceProvider
 
     private function security()
     {
-        $this->ensureTaskIdIsValid();
+//        self::ensureTaskIdIsValid();
         $this->preventTamperingOtherUsersTasks();
         $this->preventTooManyTasks();
     }
@@ -56,7 +56,7 @@ class HeymanServiceProvider extends ServiceProvider
             ->weRespondFrom([TamperWithOthersTasks::class, 'response']);
     }
 
-    private function ensureTaskIdIsValid()
+    static function ensureTaskIdIsValid()
     {
         HeyMan::onRoute([
             'tasks.delete',
