@@ -1,15 +1,17 @@
 ## Laravel daily Tasks
 
-Laravel 8 with user authentication, password recovery, and individual user tasks lists.
+### A non-trivial task app written in laravel 8
+
+### Features:
+- Users get banned for 2 minutes if they tamper with task ids in url. (using `laravel-temp-tag` and `laravel-heyman` package)
+- No user can have to than 10 daily tasks.
+- It logs any validation errors, banning or tampering with url parameters.
 
 This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-task as `done`, `failed`, `skipped`, etc and they will be automatically rollback to the default  (`not started`) state at the end of the day. (without using any cron job)
 
 Super easy setup, can be done in 5 minutes or less.
 
-### Features:
-- Users get banned for 2 minutes if they tamper with task ids in url.
-- No user can have to than 10 daily tasks.
-- It logs any validation errors and tampering with url parameters.
+
 
 
 ### Quick Project Setup
