@@ -8,7 +8,7 @@ use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class PreventTamperingOtherUsersTasks
 {
-    static function handle()
+    static function install()
     {
         HeyMan::onRoute([
             'tasks.delete',

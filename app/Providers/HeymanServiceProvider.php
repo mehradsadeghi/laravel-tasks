@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Behaviors\AuthenticateTasks;
+use App\Behaviors\BansSuspeciousUsers;
 use App\Behaviors\PreventTooManyTasksBehavior;
 use App\Behaviors\PreventTamperingOtherUsersTasks;
+use App\Behaviors\StopsBannedUsersFromManagingTasks;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class HeymanServiceProvider extends ServiceProvider
@@ -17,9 +19,11 @@ class HeymanServiceProvider extends ServiceProvider
 
     private function security()
     {
-        AuthenticateTasks::handle();
-        PreventTamperingOtherUsersTasks::handle();
-        PreventTooManyTasksBehavior::handle();
+        AuthenticateTasks::install();
+        BansSuspeciousUsers::install();
+        PreventTamperingOtherUsersTasks::install();
+        PreventTooManyTasksBehavior::install();
+        StopsBannedUsersFromManagingTasks::install();
     }
 
     /*j,static function ensureTaskIdIsValid()

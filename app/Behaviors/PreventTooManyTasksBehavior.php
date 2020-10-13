@@ -14,7 +14,7 @@ class PreventTooManyTasksBehavior
         return Task::getCount(auth()->id()) < self::affordable;
     }
 
-    public static function handle()
+    public static function install()
     {
         HeyMan::onRoute([
             'tasks.create',

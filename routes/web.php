@@ -14,8 +14,8 @@ Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.crea
 Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
 
 
-Route:: middleware(['auth', TaskIdIsValid::class, UserOwnsTask::class,])->
-    get('tasks/{task}/edit', [TasksController::class, 'edit'])
+Route:: middleware([TaskIdIsValid::class])
+    ->get('tasks/{task}/edit', [TasksController::class, 'edit'])
     ->middleware(['view:tasks.edit'])
     ->name('tasks.edit');
 
