@@ -17,7 +17,9 @@
         "imanghafoori/laravel-masterpass": "^2.0",
         "laravel/socialite": "^5.0",
         "imanghafoori/laravel-nullable": "^1.2",
-        "imanghafoori/laravel-heyman": "^2.2"
+        "imanghafoori/laravel-heyman": "^2.2",
+        "imanghafoori/laravel-makesure": "^1.1",
+        "doctrine/dbal": "^2.11"
     },
     "require-dev": {
         "imanghafoori/laravel-microscope": "^1.0",

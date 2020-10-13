@@ -30,3 +30,6 @@ Homestead.json
 /vendor
 /node_modules
 /public/storage
+
+### TESTING EXCLUSIONS ###
+.phpunit.result.cache
