@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
 use Illuminate\Http\Response;
-use App\Events\User\LoggedIn;
-use App\Events\User\LoggedOut;
 use Illuminate\Routing\Controller;
-use Codino\UserStatusModule\UserStatus;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -31,8 +27,6 @@ class LoginController extends Controller
      */
     public function show()
     {
-        return view('auth.login', [
-            'socialProviders' => config('auth.social.providers')
-        ]);
+        return view('auth.login');
     }
 }
