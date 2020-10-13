@@ -101,7 +101,8 @@ class TasksController extends Controller
     private function tagTaskState($completion, $task)
     {
         $expireAt = Carbon::now()->endOfDay();
-        tempTags($task)->tagIt('state', $expireAt, ['value' => $completion]);
+        $payload = ['value' => $completion, 'at' => now()->format('H:i:s')];
+        tempTags($task)->tagIt('state', $expireAt, $payload);
     }
 
     private function getTasksWithTag($uid, string $tag)

@@ -2,20 +2,19 @@
 
 namespace App\Task;
 
-use App\Policies\TaskPolicy;
-use App\TamperWithOthersTasks;
+use App\Behaviors\PreventTamperingOtherUsersTasks;
 
 class UserOwnsTask
 {
     public function handle($request, $next)
     {
-        if (TaskPolicy::ownsTask()) {
+        if (PreventTamperingOtherUsersTasks::ownsTask()) {
             return $next($request);
         }
 
-        TamperWithOthersTasks::reaction();
+        PreventTamperingOtherUsersTasks::reaction();
         event('tamperWithOthersTasks');
 
-        return TamperWithOthersTasks::response();
+        return PreventTamperingOtherUsersTasks::response();
     }
 }

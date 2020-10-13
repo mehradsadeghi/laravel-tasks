@@ -8,12 +8,13 @@
 
     <td>
             <span class="label label-default">
-                {!! optional(tempTags($task)->getActiveTag('state'))->getPayload('value') ?? 'not_started' !!}
+                @php($payload = optional(tempTags($task)->getActiveTag('state'))->getPayload())
+                {!! $payload['value'] ?? 'not_started' !!}
             </span>
     </td>
 
     <!-- Task Status Checkbox -->
-    <td></td>
+    <td>{!!$payload['at'] ?? '' !!}</td>
 
     <!-- Task Edit Icon -->
     <td>
