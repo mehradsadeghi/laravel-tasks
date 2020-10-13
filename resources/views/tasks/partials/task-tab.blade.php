@@ -13,7 +13,7 @@
                 <th colspan="3">Status</th>
                 </thead>
                 <tbody>
-                @foreach ($tasks as $task)
+                @foreach($tasks as $task)
                     @include('tasks.partials.task-row')
                 @endforeach
                 </tbody>
