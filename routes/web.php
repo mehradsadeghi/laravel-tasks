@@ -1,7 +1,5 @@
 <?php
 
-use App\Task\TaskIdIsValid;
-use App\Task\UserOwnsTask;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TasksController;
 
@@ -14,9 +12,8 @@ Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.crea
 Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
 
 
-Route:: middleware([TaskIdIsValid::class])
-    ->get('tasks/{task}/edit', [TasksController::class, 'edit'])
-    ->middleware(['view:tasks.edit'])
+Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])
+    ->middleware('view:tasks.edit')
     ->name('tasks.edit');
 
 Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');

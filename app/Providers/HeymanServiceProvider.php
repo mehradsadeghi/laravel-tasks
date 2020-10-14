@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Behaviors\AuthenticateTasks;
 use App\Behaviors\BansSuspeciousUsers;
+use App\Behaviors\EnsureTaskIdIsValid;
 use App\Behaviors\PreventTooManyTasksBehavior;
 use App\Behaviors\PreventTamperingOtherUsersTasks;
 use App\Behaviors\StopsBannedUsersFromManagingTasks;
@@ -21,6 +22,7 @@ class HeymanServiceProvider extends ServiceProvider
     {
         AuthenticateTasks::install();
         BansSuspeciousUsers::install();
+        EnsureTaskIdIsValid::install();
         PreventTamperingOtherUsersTasks::install();
         PreventTooManyTasksBehavior::install();
         StopsBannedUsersFromManagingTasks::install();
