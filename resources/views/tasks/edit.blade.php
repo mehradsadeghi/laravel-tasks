@@ -15,12 +15,13 @@
                     </div>
                     <div class="panel-body">
 
-                        {!! Form::model($task, array('action' => array('TasksController@update', $task->id), 'method' => 'PUT')) !!}
-
+                        <form action="{!! route('tasks.update', $task->id) !!}" method="post">
+                            @method('put')
+                            @csrf
                             <div class="form-group row">
                                 {!! Form::label('name', 'Task Name', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::text('name', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                                    {!! Form::text('name', $task->name, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
                                 </div>
                             </div>
 
@@ -28,7 +29,7 @@
                             <div class="form-group row">
                                 {!! Form::label('description', 'Task Description', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::textarea('description', null, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
+                                    {!! Form::textarea('description', $task->description, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
                                 </div>
                             </div>
 
@@ -72,7 +73,7 @@
                         </a>
 
                         {!! Form::open(array('class' => 'form-inline pull-right', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
-                            {{ method_field('DELETE') }}
+                            @method('DELETE')
                             {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger'))}}
                         {!! Form::close() !!}
 

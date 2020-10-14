@@ -36,11 +36,6 @@ class TasksController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return view('tasks.create');
-    }
-
     public function store()
     {
         // validation: routes/validators.php
@@ -78,7 +73,7 @@ class TasksController extends Controller
     public function destroy($id)
     {
         $task = Task::query()->find($id);
-        $task->unTag();
+        tempTags($task)->unTag();
         $task->delete();
 
         return redirect('/tasks')->with('success', 'Task Deleted');

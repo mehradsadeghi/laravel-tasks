@@ -8,7 +8,7 @@ Route::view('/home', 'home')->middleware('auth');
 
 
 Route::get('tasks', [TasksController::class, 'index'])->name('tasks.index');
-Route::get('tasks/create', [TasksController::class, 'create'])->name('tasks.create');
+Route::view('tasks/create', 'tasks.create')->name('tasks.create');
 Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
 
 
