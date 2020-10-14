@@ -10,9 +10,11 @@ class View
          * @var $data \Illuminate\Http\JsonResponse
          */
         $data = $next($req);
-        if (!$data->getOriginalContent()) {
+
+        if (! $data->getOriginalContent()) {
             return $data;
         }
+
         return response()->view($name, $data->getOriginalContent());
     }
 }

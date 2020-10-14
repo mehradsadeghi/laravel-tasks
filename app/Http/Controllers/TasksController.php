@@ -47,12 +47,11 @@ class TasksController extends Controller
         // By default we do not tag the tasks.
         // so if there is not tag it means they are not tried
 
-        return redirect('/tasks')->with('success', 'Task created');
+        return redirect('/tasks')->with('success', 'Task '.$task->name.' created');
     }
 
     public function edit($id)
     {
-        // users should not be able to edit or see each others tasks.
         $task = Task::query()->find($id);
 
         return compact('task');
@@ -61,13 +60,11 @@ class TasksController extends Controller
     public function update($id)
     {
         // validation: routes/validators.php
-        $validData = request()->only('state');
-
-        $task = $this->saveTask($id, $validData);
+        $task = Task::query()->find($id);
 
         $this->tagTaskState(request('state'), $task);
 
-        return redirect('tasks')->with('success', 'Task Updated');
+        return redirect('tasks')->with('success', 'Task State Updated');
     }
 
     public function destroy($id)
@@ -84,19 +81,10 @@ class TasksController extends Controller
         return Task::query()->orderBy('created_at', 'asc')->where('user_id', $userId);
     }
 
-    private function saveTask(int $taskId, $data)
-    {
-        $task = Task::query()->findOrFail($taskId);
-
-        $task->fill($data)->save();
-
-        return $task;
-    }
-
-    private function tagTaskState($completion, $task)
+    private function tagTaskState($state, $task)
     {
         $expireAt = Carbon::now()->endOfDay();
-        $payload = ['value' => $completion, 'at' => now()->format('H:i:s')];
+        $payload = ['value' => $state, 'at' => now()->format('H:i:s')];
         tempTags($task)->tagIt('state', $expireAt, $payload);
     }
 
