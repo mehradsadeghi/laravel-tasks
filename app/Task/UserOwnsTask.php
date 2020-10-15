@@ -2,7 +2,7 @@
 
 namespace App\Task;
 
-use App\Behaviors\PreventTamperingOtherUsersTasks;
+use App\TaskManagement\Behaviors\PreventTamperingOtherUsersTasks;
 
 class UserOwnsTask
 {

@@ -1,8 +1,6 @@
 <?php
 
-
-namespace App\Behaviors;
-
+namespace App\TaskManagement\Behaviors;
 
 use Imanghafoori\HeyMan\Facades\HeyMan;
 

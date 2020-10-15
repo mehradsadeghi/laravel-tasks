@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Behaviors;
+namespace App\TaskManagement\Behaviors;
 
 
 use App\Task;

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Behaviors;
+namespace App\TaskManagement\Behaviors;
 
 use Illuminate\Support\Facades\Event;
 
-class BansSuspeciousUsers
+class BansSuspiciousUsers
 {
     static function install()
     {

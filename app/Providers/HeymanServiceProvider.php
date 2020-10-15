@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use App\Behaviors\AuthenticateTasks;
-use App\Behaviors\BansSuspeciousUsers;
-use App\Behaviors\EnsureTaskIdIsValid;
-use App\Behaviors\PreventMultiTasking;
-use App\Behaviors\PreventTooManyTasksBehavior;
-use App\Behaviors\PreventTamperingOtherUsersTasks;
-use App\Behaviors\StopsBannedUsersFromManagingTasks;
+use App\TaskManagement\Behaviors\AuthenticateTasks;
+use App\TaskManagement\Behaviors\BansSuspiciousUsers;
+use App\TaskManagement\Behaviors\EnsureTaskIdIsValid;
+use App\TaskManagement\Behaviors\PreventMultiTasking;
+use App\TaskManagement\Behaviors\PreventTooManyTasksBehavior;
+use App\TaskManagement\Behaviors\PreventTamperingOtherUsersTasks;
+use App\TaskManagement\Behaviors\PreventsBannedUsersFromManagingTasks;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class HeymanServiceProvider extends ServiceProvider
@@ -22,12 +22,12 @@ class HeymanServiceProvider extends ServiceProvider
     private function security()
     {
         AuthenticateTasks::install();
-        BansSuspeciousUsers::install();
+        BansSuspiciousUsers::install();
         EnsureTaskIdIsValid::install();
         PreventMultiTasking::install();
         PreventTamperingOtherUsersTasks::install();
         PreventTooManyTasksBehavior::install();
-        StopsBannedUsersFromManagingTasks::install();
+        PreventsBannedUsersFromManagingTasks::install();
     }
 
     /*j,static function ensureTaskIdIsValid()

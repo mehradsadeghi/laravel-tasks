@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Behaviors;
+namespace App\TaskManagement\Behaviors;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
-class StopsBannedUsersFromManagingTasks
+class PreventsBannedUsersFromManagingTasks
 {
     public static function install()
     {

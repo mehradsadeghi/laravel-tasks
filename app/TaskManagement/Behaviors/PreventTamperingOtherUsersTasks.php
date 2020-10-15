@@ -1,46 +1,46 @@
 <?php
 
-namespace App\Behaviors;
+namespace App\TaskManagement\Behaviors;
 
 use App\Task;
 use Illuminate\Support\Facades\Log;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
-class EnsureTaskIdIsValid
+class PreventTamperingOtherUsersTasks
 {
-    public static function install()
+    static function install()
     {
         HeyMan::onRoute([
             'tasks.delete',
             'tasks.update',
             'tasks.edit',
-        ])->thisMethodShouldAllow([self::class, 'isValidTaskId'])
+        ])->thisMethodShouldAllow([self::class, 'ownsTask'])
             ->otherwise()
             ->afterCalling([self::class, 'reaction'])
-            ->afterFiringEvent('invalidTaskIdAttempted')
+            ->afterFiringEvent('tamperWithOthersTasks')
             ->weRespondFrom([self::class, 'response']);
     }
 
-    public static function reaction()
+    static function ownsTask()
     {
-        Log::alert('Someone tried to access a non-existing task!', [
+        $id = (int) request()->route()->parameter('task');
+
+        return auth()->id() == Task::query()->find($id)->user_id;
+    }
+
+    static function reaction()
+    {
+        Log::alert('someone tried to access others tasks!', [
             'user_id' => auth()->id(),
             'route' => request()->route()->getName(),
             'task_id' => request()->route()->parameter('task')
         ]);
     }
 
-    public static function response()
+    static function response()
     {
         return redirect()
             ->back()
             ->withErrors('Tampering with url data will result in a temporary ban.');
-    }
-
-    public static function isValidTaskId()
-    {
-        $id = (int) request()->route()->parameter('task');
-
-        return is_numeric($id) && (bool) Task::query()->find($id);
     }
 }
