@@ -30,7 +30,7 @@ class HeymanServiceProvider extends ServiceProvider
         PreventsBannedUsersFromManagingTasks::install();
     }
 
-    /*j,static function ensureTaskIdIsValid()
+    /*static function ensureTaskIdIsValid()
     {
         HeyMan::onRoute([
             'tasks.delete',

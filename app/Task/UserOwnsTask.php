@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Task;
+namespace App\TaskManagement\DB\Task;
 
 use App\TaskManagement\Behaviors\PreventTamperingOtherUsersTasks;
 

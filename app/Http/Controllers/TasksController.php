@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Task;
-use Illuminate\Support\Carbon;
+use App\TaskManagement\DB\Task;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TasksController extends Controller
 {
-    use AuthorizesRequests;
-
     public function home()
     {
         return view('home');
@@ -21,18 +17,12 @@ class TasksController extends Controller
         $userId = auth()->id();
 
         return view('tasks.index', [
-            'tasks' => $this->tasksOfUser($userId)->get(),
-            'tasksComplete' => $this->getTasksWithTag($userId, 'done'),
-            'tasksInComplete' => $this->tasksOfUser($userId)
-                ->where(function ($q) {
-                    $q->hasActiveTags('state', ['value' => 'not_started'])
-                        // this is for yesterday tasks with expired tags which are considered to be not_started for today.
-                        ->orHasNotActiveTags('state');
-                })
-                ->get(),
-            'tasksDoing' => $this->getTasksWithTag($userId, 'doing'),
-            'tasksFailed' => $this->getTasksWithTag($userId, 'failed'),
-            'tasksWont_do' => $this->getTasksWithTag($userId, 'wont_do'),
+            'tasks' => Task::ofUserId($userId)->get(),
+            'tasksComplete' => Task::ofUserId($userId)->whereStateIs('done')->get(),
+            'tasksInComplete' => Task::ofUserId($userId)->withDefaultState()->get(),
+            'tasksDoing' => Task::ofUserId($userId)->whereStateIs('doing')->get(),
+            'tasksFailed' => Task::ofUserId($userId)->whereStateIs('failed')->get(),
+            'tasksWont_do' => Task::ofUserId($userId)->whereStateIs('wont_do')->get(),
         ]);
     }
 
@@ -60,36 +50,15 @@ class TasksController extends Controller
     public function update($id)
     {
         // validation: routes/validators.php
-        $task = Task::query()->find($id);
-
-        $this->tagTaskState(request('state'), $task);
+        Task::query()->find($id)->setState(request('state'));
 
         return redirect('tasks')->with('success', 'Task State Updated');
     }
 
     public function destroy($id)
     {
-        $task = Task::query()->find($id);
-        tempTags($task)->unTag();
-        $task->delete();
+        Task::remove($id);
 
         return redirect('/tasks')->with('success', 'Task Deleted');
-    }
-
-    private function tasksOfUser($userId)
-    {
-        return Task::query()->orderBy('created_at', 'asc')->where('user_id', $userId);
-    }
-
-    private function tagTaskState($state, $task)
-    {
-        $expireAt = now()->endOfDay();
-        $payload = ['value' => $state, 'at' => now()->format('H:i:s')];
-        tempTags($task)->tagIt('state', $expireAt, $payload);
-    }
-
-    private function getTasksWithTag($uid, string $tag)
-    {
-        return $this->tasksOfUser($uid)->hasActiveTags('state', ['value' => $tag])->get();
     }
 }

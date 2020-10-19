@@ -2,7 +2,7 @@
 
 namespace App\TaskManagement\Behaviors;
 
-use App\Task;
+use App\TaskManagement\DB\Task;
 use Illuminate\Support\Facades\Log;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 

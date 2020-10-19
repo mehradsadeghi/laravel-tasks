@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Task;
+namespace App\TaskManagement\DB\Task;
 
 class EditFormData
 {
@@ -8,6 +8,6 @@ class EditFormData
     {
         $taskId = request()->route()->parameter('task');
 
-        return ['task' => \App\Task::query()->find($taskId)];
+        return ['task' => \App\TaskManagement\DB\Task::query()->find($taskId)];
     }
 }
