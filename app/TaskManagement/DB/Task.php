@@ -3,6 +3,7 @@
 namespace App\TaskManagement\DB;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Imanghafoori\Tags\Traits\hasTempTags;
 
 class Task extends Model
@@ -31,32 +32,8 @@ class Task extends Model
         return $this->hasActiveTags('state', ['value' => $state])->get();
     }
 
-    public static function ofUserId($userId): self
+    public static function ofUserId($userId): Builder
     {
         return self::query()->orderBy('created_at', 'asc')->where('user_id', $userId);
-    }
-
-    public static function remove($id)
-    {
-        $task = Task::query()->find($id);
-        tempTags($task)->unTag();
-
-        return $task->delete();
-    }
-
-    public function setState(string $state)
-    {
-        $expireAt = now()->endOfDay();
-        $payload = ['value' => $state, 'at' => now()->format('H:i:s')];
-        tempTags($this)->tagIt('state', $expireAt, $payload);
-    }
-
-    public function withDefaultState()
-    {
-        // this is for yesterday tasks with expired tags
-        // which are considered to be not_started for today.
-        return $this->where(function ($q) {
-            $q->whereStateIs('not_started')->orHasNotActiveTags('state');
-        });
     }
 }

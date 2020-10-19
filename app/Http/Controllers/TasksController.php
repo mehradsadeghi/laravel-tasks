@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\TaskManagement\DB\Task;
+use App\TaskManagement\DB\TaskRepo;
 use Illuminate\Routing\Controller;
 
 class TasksController extends Controller
@@ -17,12 +18,12 @@ class TasksController extends Controller
         $userId = auth()->id();
 
         return view('tasks.index', [
-            'tasks' => Task::ofUserId($userId)->get(),
-            'tasksComplete' => Task::ofUserId($userId)->whereStateIs('done')->get(),
-            'tasksInComplete' => Task::ofUserId($userId)->withDefaultState()->get(),
-            'tasksDoing' => Task::ofUserId($userId)->whereStateIs('doing')->get(),
-            'tasksFailed' => Task::ofUserId($userId)->whereStateIs('failed')->get(),
-            'tasksWont_do' => Task::ofUserId($userId)->whereStateIs('wont_do')->get(),
+            'tasks' => TaskRepo::find($userId)->get(),
+            'tasksComplete' => TaskRepo::find($userId, 'done')->get(),
+            'tasksInComplete' => TaskRepo::withDefaultState($userId)->get(),
+            'tasksDoing' => TaskRepo::find($userId, 'doing')->get(),
+            'tasksFailed' => TaskRepo::find($userId, 'failed')->get(),
+            'tasksWont_do' => TaskRepo::find($userId, 'skipped')->get(),
         ]);
     }
 
@@ -30,12 +31,8 @@ class TasksController extends Controller
     {
         // validation: routes/validators.php
         $data = request()->only(['name', 'description']);
-        $data['user_id'] = auth()->id();
 
-        $task = Task::query()->create($data);
-
-        // By default we do not tag the tasks.
-        // so if there is not tag it means they are not tried
+        $task = TaskRepo::saveNew($data, auth()->id());
 
         return redirect('/tasks')->with('success', 'Task '.$task->name.' created');
     }
@@ -43,21 +40,22 @@ class TasksController extends Controller
     public function edit($id)
     {
         $task = Task::query()->find($id);
+        $state = TaskRepo::getState($task);
 
-        return compact('task');
+        return compact('task', 'state');
     }
 
     public function update($id)
     {
         // validation: routes/validators.php
-        Task::query()->find($id)->setState(request('state'));
+        TaskRepo::changeState($id, request('state'));
 
         return redirect('tasks')->with('success', 'Task State Updated');
     }
 
     public function destroy($id)
     {
-        Task::remove($id);
+        TaskRepo::remove($id);
 
         return redirect('/tasks')->with('success', 'Task Deleted');
     }

@@ -2,7 +2,6 @@
 
 namespace App\TaskManagement\Behaviors;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
@@ -19,10 +18,10 @@ class PreventsBannedUsersFromManagingTasks
         ])->thisMethodShouldAllow([self::class, 'isNotBanned'])
             ->otherwise()
             ->afterCalling([self::class, 'logBannedUserPrevented'])
-            ->weRespondFrom([self::class, 'youAreBanned']);
+            ->weRespondFrom([self::class, 'youAreBannedResponse']);
     }
 
-    public static function youAreBanned()
+    public static function youAreBannedResponse()
     {
         $tag = tempTags(auth()->user())->getActiveTag('banned');
         $reason = $tag->getPayload('reason');
@@ -32,7 +31,7 @@ class PreventsBannedUsersFromManagingTasks
             ->withErrors([
                 'You are temporarily banned. Because of: "'.$reason.'"',
                 'You can see your tasks list but not manage them.',
-                'Your ban will expire in: '.Carbon::now()->diffInSeconds($tag->expired_at) .' sec'
+                'Your ban will expire in: '.now()->diffInSeconds($tag->expired_at).' sec'
             ]);
     }
 

@@ -37,19 +37,29 @@
                             <!-- Task Status -->
 
                             <div class="form-group row">
-                                <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Status</label>
+                                <div class="col-sm-6">
+                                    @php
+                                        $states = [
+
+                                            'done' => 'Done :)',
+                                            'doing' => 'Doing...',
+                                            'failed' => 'Failed :(',
+                                            'skipped' => 'Skipped :|',
+                                        ];
+                                    @endphp
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Change Status from "{!! $states[$state] ?? 'Not Started' !!}" to:</label>
+
                                 <div class="col-sm-6">
                                     <div class="select">
                                         <label for="status">
-
-                                            {!! Form::select('state',
-                                            [
-                                                'not_started' => 'Not Started',
-                                                'done' => 'Done   :)',
-                                                'doing' => 'Doing...',
-                                                'failed' => 'Failed   :(',
-                                                'wont_do' => 'will not try  :|',
-                                            ],  optional(tempTags($task)->getActiveTag('state'))->getPayload('value'), ['class' => 'form-control']) !!}
+                                            @php
+                                                unset($states[$state]);
+                                            @endphp
+                                            {!! Form::select('state', $states, $state, ['class' => 'form-control']) !!}
                                         </label>
                                     </div>
                                 </div>

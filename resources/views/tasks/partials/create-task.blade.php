@@ -22,7 +22,7 @@
     <!-- Add Task Button -->
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-6">
-             {{Form::button('<span class="fa fa-plus fa-fw" aria-hidden="true"></span> Create Task', array('type' => 'submit', 'class' => 'btn btn-default'))}}
+             {{ Form::button('<span class="fa fa-plus fa-fw" aria-hidden="true"></span> Create Task', ['type' => 'submit', 'class' => 'btn btn-default'])}}
         </div>
     </div>
 

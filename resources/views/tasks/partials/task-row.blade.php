@@ -18,6 +18,11 @@
 
     <!-- Task Edit Icon -->
     <td>
+        {!! Form::open(array('class' => 'form-inline pull-right', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
+            @method('DELETE')
+            {{ Form::button('<a href="#" class="pull-right"> <span class="fa fa-trash fa-fw" aria-hidden="true"></span>
+               <span class="sr-only">Delete Task</span> </a>', ['type' => 'submit']) }}
+        {!! Form::close() !!}
         <a href="{{ route('tasks.edit', $task->id) }}" class="pull-right">
             <span class="fa fa-pencil fa-fw" aria-hidden="true"></span>
             <span class="sr-only">Edit Task</span>

@@ -16,7 +16,7 @@
                         <li><a href="#complete" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">Complete</span></a></li>
                         <li><a href="#failed" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">failed</span></a></li>
                         <li><a href="#doing" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">doing</span></a></li>
-                        <li><a href="#wont_do" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">wont_do</span></a></li>
+                        <li><a href="#wont_do" data-toggle="tab"><span class="fa fa-check-square-o" aria-hidden="true"></span> <span class="hidden-xs">Skipped</span></a></li>
                     </ul>
                     <div id="my-tab-content" class="tab-content">
 
@@ -25,7 +25,7 @@
                         @include('tasks/partials/task-tab', ['tab' => 'complete', 'tasks' => $tasksComplete, 'title' => 'Complete Tasks'])
                         @include('tasks/partials/task-tab', ['tab' => 'doing', 'tasks' => $tasksDoing, 'title' => 'Doing Tasks'])
                         @include('tasks/partials/task-tab', ['tab' => 'failed', 'tasks' => $tasksFailed, 'title' => 'Failed'])
-                        @include('tasks/partials/task-tab', ['tab' => 'wont_do', 'tasks' => $tasksWont_do, 'title' => 'wont do'])
+                        @include('tasks/partials/task-tab', ['tab' => 'wont_do', 'tasks' => $tasksWont_do, 'title' => 'Skipped'])
 
                     </div>
                 </div>

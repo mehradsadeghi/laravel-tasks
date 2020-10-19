@@ -8,5 +8,5 @@ HeyMan::onRoute('tasks.store')->validate([
 ]);
 
 HeyMan::onRoute('tasks.update')->validate([
-    'state' => 'required|in:not_started,done,doing,failed,wont_do'
+    'state' => 'required|in:not_started,done,doing,failed,skipped'
 ]);
