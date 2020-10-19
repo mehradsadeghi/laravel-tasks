@@ -25,7 +25,7 @@
                         @include('tasks/partials/task-tab', ['tab' => 'complete', 'tasks' => $tasksComplete, 'title' => 'Complete Tasks'])
                         @include('tasks/partials/task-tab', ['tab' => 'doing', 'tasks' => $tasksDoing, 'title' => 'Doing Tasks'])
                         @include('tasks/partials/task-tab', ['tab' => 'failed', 'tasks' => $tasksFailed, 'title' => 'Failed'])
-                        @include('tasks/partials/task-tab', ['tab' => 'wont_do', 'tasks' => $tasksWont_do, 'title' => 'Skipped'])
+                        @include('tasks/partials/task-tab', ['tab' => 'wont_do', 'tasks' => $tasksSkipped, 'title' => 'Skipped'])
 
                     </div>
                 </div>

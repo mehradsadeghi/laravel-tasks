@@ -23,7 +23,7 @@ class TaskRepo
         $task = Task::query()->find($id);
         tempTags($task)->unTag();
 
-        return $task->delete();
+        return [$task, $task->delete()];
     }
 
     public static function changeState($id, string $state)

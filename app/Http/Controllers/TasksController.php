@@ -23,7 +23,7 @@ class TasksController extends Controller
             'tasksInComplete' => TaskRepo::withDefaultState($userId)->get(),
             'tasksDoing' => TaskRepo::find($userId, 'doing')->get(),
             'tasksFailed' => TaskRepo::find($userId, 'failed')->get(),
-            'tasksWont_do' => TaskRepo::find($userId, 'skipped')->get(),
+            'tasksSkipped' => TaskRepo::find($userId, 'skipped')->get(),
         ]);
     }
 
@@ -34,7 +34,7 @@ class TasksController extends Controller
 
         $task = TaskRepo::saveNew($data, auth()->id());
 
-        return redirect('/tasks')->with('success', 'Task '.$task->name.' created');
+        return $this->redirectIndex('Task '.$task->name.' created');
     }
 
     public function edit($id)
@@ -50,13 +50,18 @@ class TasksController extends Controller
         // validation: routes/validators.php
         TaskRepo::changeState($id, request('state'));
 
-        return redirect('tasks')->with('success', 'Task State Updated');
+        return $this->redirectIndex('Task State Updated to '.request('state'));
     }
 
     public function destroy($id)
     {
-        TaskRepo::remove($id);
+        [$task, ] = TaskRepo::remove($id);
 
-        return redirect('/tasks')->with('success', 'Task Deleted');
+        return $this->redirectIndex("Task '{$task->name}' Deleted");
+    }
+
+    public function redirectIndex($msg)
+    {
+        return redirect('tasks')->with(['success' => $msg]);
     }
 }
