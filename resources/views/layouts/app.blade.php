@@ -38,23 +38,18 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ route('welcome') }}">
                         Laravel Task List
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        <li class="{{ Request::is('home') ? 'active' : '' }}"><a href="{{ url('/home') }}">Home</a></li>
-                    </ul>
-
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ url('/login') }}">Login</a></li>
-                            <li><a href="{{ url('/register') }}">Register</a></li>
+                            <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li>
                         @else
 
                             <li class="dropdown">
@@ -62,17 +57,17 @@
                                     Tasks <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li class="{{ Request::is('tasks') ? 'active' : '' }}"><a href="{{ url('/tasks') }}"><i class="fa fa-btn fa-tasks" aria-hidden="true"></i>Tasks Overview</a></li>
-                                    <li class="{{ Request::is('tasks/create') ? 'active' : '' }}"><a href="{{ url('/tasks/create') }}"><i class="fa fa-btn fa-plus" aria-hidden="true"></i>Create Task</a></li>
+                                    <li class="{{ Request::is('tasks') ? 'active' : '' }}"><a href="{{ route('tasks.index') }}"><i class="fa fa-btn fa-tasks" aria-hidden="true"></i>Tasks Overview</a></li>
+                                    <li class="{{ Request::is('tasks/create') ? 'active' : '' }}"><a href="{{ route('tasks.create') }}"><i class="fa fa-btn fa-plus" aria-hidden="true"></i>Create Task</a></li>
                                 </ul>
                             </li>
 
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ auth()->user()->name }} <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+                                    <li><a href="{{ route('logout') }}"><i class="fa fa-btn fa-sign-out" aria-hidden="true"></i>Logout</a></li>
                                 </ul>
                             </li>
                         @endif

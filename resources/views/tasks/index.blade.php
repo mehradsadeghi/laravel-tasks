@@ -10,6 +10,15 @@
             @if (count($tasks) > 0)
 
                 <div id="content">
+                    @php
+                        $time = now()->diffForHumans(now()->endOfDay(), ['parts' => 2, 'join' => false, 'short' => true]);
+                    @endphp
+                    <h4>
+                    You have {!! $time !!} the end of the day.
+                    </h4>
+                    <br>
+                </div>
+                <div id="content">
                     <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
                         <li class="active"><a href="#all" data-toggle="tab"><span class="fa fa-tasks" aria-hidden="true"></span> <span class="hidden-xs">All</span></a></li>
                         <li><a href="#incomplete" data-toggle="tab"><span class="fa fa-square-o" aria-hidden="true"></span> <span class="hidden-xs">Incomplete</span></a></li>
