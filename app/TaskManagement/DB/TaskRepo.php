@@ -21,6 +21,9 @@ class TaskRepo
     public static function remove($id)
     {
         $task = Task::query()->find($id);
+
+        event('task.deleting', [$task]);
+
         tempTags($task)->unTag();
 
         return [$task, $task->delete()];
@@ -32,6 +35,8 @@ class TaskRepo
         $expireAt = now()->endOfDay();
         $payload = ['value' => $state, 'at' => now()->format('H:i:s')];
 
+        event('task.changing_state', [$task, $state]);
+
         tempTags($task)->tagIt(self::state, $expireAt, $payload);
     }
 
@@ -41,7 +46,9 @@ class TaskRepo
 
         $task = Task::query()->create($data);
 
-        tempTags($task)->tagIt(self::state, ['value' => self::defaultState]);
+        tempTags($task)->tagIt(self::state, now()->endOfDay(), ['value' => self::defaultState]);
+
+        event('task.created', [$task, self::defaultState]);
 
         return $task;
     }
@@ -55,7 +62,7 @@ class TaskRepo
         return $q;
     }
 
-    public static function getState($task)
+    public static function getState($task): string
     {
         return optional(tempTags($task)->getActiveTag(self::state))->getPayload('value') ?? self::defaultState;
     }

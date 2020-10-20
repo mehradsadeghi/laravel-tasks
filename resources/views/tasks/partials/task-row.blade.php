@@ -8,8 +8,7 @@
 
     <td>
             <span class="label label-default">
-                @php($payload = optional(tempTags($task)->getActiveTag('state'))->getPayload())
-                {!! $payload['value'] ?? 'not_started' !!}
+                {!! TaskRepo::getState($task) !!}
             </span>
     </td>
 

@@ -5,11 +5,9 @@ use App\Http\Controllers\TasksController;
 
 Route::view('/', 'welcome')->name('welcome');
 
-
-Route::get('tasks', [TasksController::class, 'index'])->name('tasks.index');
+Route::view('tasks', 'tasks.index')->name('tasks.index');
 Route::view('tasks/create', 'tasks.create')->name('tasks.create');
 Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
-
 
 Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])
     ->middleware('view:tasks.edit')
@@ -21,10 +19,10 @@ Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.
 
 ###########        Authentication routes:        ###########
 Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register', 'Auth\RegisterController@register');
+Route::post('register', 'Auth\RegisterController@register')->name('register.post');
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
+Route::post('login', 'Auth\LoginController@login')->name('login.post');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');

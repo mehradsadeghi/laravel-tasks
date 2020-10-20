@@ -33,14 +33,10 @@
                                 </div>
                             </div>
 
-
-                            <!-- Task Status -->
-
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     @php
                                         $states = [
-
                                             'done' => 'Done :)',
                                             'doing' => 'Doing...',
                                             'failed' => 'Failed :(',

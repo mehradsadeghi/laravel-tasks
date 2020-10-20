@@ -21,6 +21,7 @@ class TasksServiceProvider extends ServiceProvider
         Behaviors\PreventMultiTasking::install();
         Behaviors\PreventTamperingOtherUsersTasks::install();
         Behaviors\PreventTooManyTasksBehavior::install();
+        Behaviors\ItExpiresWidgetCaches::install();
         Behaviors\PreventsBannedUsersFromManagingTasks::install();
     }
 }
