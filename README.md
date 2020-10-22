@@ -9,6 +9,7 @@
 - It logs any validation errors, banning or tampering with url parameters for admin to review.
 - Only one task can be at `doing` state
 - Task lists get cached
+- The time of the day at which the task state has changed is shown on the list.
 
 This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-task as `done`, `failed`, `skipped`, etc and they will be automatically rollback to the default  (`not started`) state at the end of the day. (without using any cron job)
 
