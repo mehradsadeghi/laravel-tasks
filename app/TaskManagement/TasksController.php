@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\TaskManagement;
 
 use App\TaskManagement\DB\Task;
 use App\TaskManagement\DB\TaskRepo;
@@ -10,11 +10,10 @@ class TasksController extends Controller
 {
     public function store()
     {
-        // validation? routes/validators.php
         $data = request()->only(['name', 'description']);
         $task = TaskRepo::saveNew($data, auth()->id());
 
-        return $this->redirectIndex('Task '.$task->name.' created');
+        return $this->msg('Task '.$task->name.' created');
     }
 
     public function edit($id)
@@ -27,21 +26,20 @@ class TasksController extends Controller
 
     public function update($id)
     {
-        // validation: routes/validators.php
         TaskRepo::changeState($id, request('state'));
 
-        return $this->redirectIndex('Task State Updated to '.request('state'));
+        return $this->msg('Task State Updated to '.request('state'));
     }
 
     public function destroy($id)
     {
         [$task, ] = TaskRepo::remove($id);
 
-        return $this->redirectIndex("Task '{$task->name}' Deleted");
+        return $this->msg("Task '{$task->name}' Deleted");
     }
 
-    public function redirectIndex($msg)
+    public function msg($msg)
     {
-        return redirect()->route('tasks.index')->with(['success' => $msg]);
+        return (['success' => $msg]);
     }
 }

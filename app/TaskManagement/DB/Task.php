@@ -8,6 +8,14 @@ use Imanghafoori\Tags\Traits\hasTempTags;
 
 class Task extends Model
 {
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($task) {
+            tempTags($task)->unTag();
+        });
+    }
+
     use hasTempTags;
 
     /**

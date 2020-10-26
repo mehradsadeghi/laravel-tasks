@@ -14,7 +14,8 @@ class TaskRepo
         // This is for yesterday tasks with expired tags
         // which are considered to be not_started for today.
         return $q->where(function ($q) {
-            $q->hasActiveTags(self::state, ['value' => self::defaultState])->orHasNotActiveTags(self::state);
+            $q->hasActiveTags(self::state, ['value' => self::defaultState])
+                ->orHasNotActiveTags(self::state);
         });
     }
 
@@ -24,20 +25,18 @@ class TaskRepo
 
         event('task.deleting', [$task]);
 
-        tempTags($task)->unTag();
-
         return [$task, $task->delete()];
     }
 
     public static function changeState($id, string $state)
     {
         $task = Task::query()->find($id);
-        $expireAt = now()->endOfDay();
+
         $payload = ['value' => $state, 'at' => now()->format('H:i:s')];
 
         event('task.changing_state', [$task, $state]);
 
-        tempTags($task)->tagIt(self::state, $expireAt, $payload);
+        self::setState($task, $payload);
     }
 
     public static function saveNew($data, $uid)
@@ -46,7 +45,7 @@ class TaskRepo
 
         $task = Task::query()->create($data);
 
-        tempTags($task)->tagIt(self::state, now()->endOfDay(), ['value' => self::defaultState]);
+        self::setState($task, ['value' => self::defaultState]);
 
         event('task.created', [$task, self::defaultState]);
 
@@ -65,5 +64,10 @@ class TaskRepo
     public static function getState($task): string
     {
         return optional(tempTags($task)->getActiveTag(self::state))->getPayload('value') ?? self::defaultState;
+    }
+
+    private static function setState($task, array $payload)
+    {
+        tempTags($task)->tagIt(self::state, now()->endOfDay(), $payload);
     }
 }

@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Providers;
+namespace App\TaskManagement;
 
 use App\TaskManagement\Behaviors;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class TasksServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function register()
     {
-        require_once base_path('routes/validators.php');
-        $this->behaviours();
+        HeyMan::forRoutesLike('tasks.*', function() {
+            require_once base_path('routes/validators.php');
+            $this->behaviours();
+        });
     }
 
     private function behaviours()

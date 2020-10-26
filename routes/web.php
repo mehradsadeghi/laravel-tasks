@@ -1,20 +1,46 @@
 <?php
 
+use App\TaskManagement\TasksController;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TasksController;
+use Imanghafoori\HeyMan\Facades\HeyMan;
+use Imanghafoori\HeyMan\StartGuarding;
 
+/*for($i=0; $i< 100; $i++) {
+    Event::listen('asdcasdc', 'class@method');
+}*/
+Route::get('/qqq', function () {
+    HeyMan::here(function($q) {
+        $q->thisClosureShouldAllow(function (){
+            return false;
+        })
+        ->otherwise()
+        ->redirect()->to('/aaaaa');
+    });
+    resolve(StartGuarding::class)->start();
+
+    return ['asdcasd'];
+});
 Route::view('/', 'welcome')->name('welcome');
 
 Route::view('tasks', 'tasks.index')->name('tasks.index');
 Route::view('tasks/create', 'tasks.create')->name('tasks.create');
-Route::post('tasks', [TasksController::class, 'store'])->name('tasks.store');
+
+Route::post('tasks', [TasksController::class, 'store'])
+    ->middleware('redirect:tasks.index')
+    ->name('tasks.store');
 
 Route::get('tasks/{task}/edit', [TasksController::class, 'edit'])
     ->middleware('view:tasks.edit')
     ->name('tasks.edit');
 
-Route::put('tasks/{task}', [TasksController::class, 'update'])->name('tasks.update');
-Route::delete('tasks/{task}', [TasksController::class, 'destroy'])->name('tasks.destroy');
+Route::put('tasks/{task}', [TasksController::class, 'update'])
+    ->middleware('redirect:tasks.index')
+    ->name('tasks.update');
+
+Route::delete('tasks/{task}', [TasksController::class, 'destroy'])
+    ->middleware('redirect:tasks.index')
+    ->name('tasks.destroy');
 
 
 ###########        Authentication routes:        ###########
