@@ -19,7 +19,8 @@
         "imanghafoori/laravel-nullable": "^1.2",
         "imanghafoori/laravel-heyman": "^2.2",
         "imanghafoori/laravel-makesure": "^1.1",
-        "doctrine/dbal": "^2.11"
+        "doctrine/dbal": "^2.11",
+        "imanghafoori/laravel-tokenize-login": "^1.0"
     },
     "require-dev": {
         "imanghafoori/laravel-microscope": "^1.0",

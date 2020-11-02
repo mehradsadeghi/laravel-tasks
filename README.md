@@ -3,10 +3,13 @@
 ### A non-trivial task app written in laravel 8
 
 ### Features:
-- Users get banned for 2 minutes if they tamper with task ids in url. (using `laravel-temp-tag` and `laravel-heyman` package)
+- Users get banned for 2 minutes if they tamper with task ids in url. (implemented by `laravel-temp-tag` and `laravel-heyman` package)
 - Banned users are allowed to see the task list but can not manage them.
 - No user can have to than 10 daily tasks.
 - It logs any validation errors, banning or tampering with url parameters for admin to review.
+- Only one task can be at `doing` state
+- Task lists get cached
+- The time of the day at which the task state has changed is shown on the list.
 
 This is a sample usage of my `laravel-temp-tag` package. When you mark a daily-task as `done`, `failed`, `skipped`, etc and they will be automatically rollback to the default  (`not started`) state at the end of the day. (without using any cron job)
 

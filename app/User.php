@@ -30,6 +30,6 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        return $this->hasMany(\App\Task::class);
+        return $this->hasMany(\App\TaskManagement\DB\Task::class);
     }
 }

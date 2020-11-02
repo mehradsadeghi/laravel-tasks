@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-class View
+class Redirect
 {
     public function handle($req, $next, $name)
     {
@@ -15,6 +15,6 @@ class View
             return $data;
         }
 
-        return response()->view($name, $data->getOriginalContent());
+        return redirect()->route($name, $data->getOriginalContent());
     }
 }

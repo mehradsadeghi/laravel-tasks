@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Behaviors;
+namespace App\TaskManagement\Behaviors;
 
-use App\Task;
+use App\TaskManagement\DB\Task;
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class PreventTooManyTasksBehavior
@@ -14,7 +14,7 @@ class PreventTooManyTasksBehavior
         return Task::getCount(auth()->id()) < self::affordable;
     }
 
-    public static function handle()
+    public static function install()
     {
         HeyMan::onRoute([
             'tasks.create',

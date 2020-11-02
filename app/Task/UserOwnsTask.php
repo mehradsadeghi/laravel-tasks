@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Task;
+namespace App\TaskManagement\DB\Task;
 
-use App\Behaviors\PreventTamperingOtherUsersTasks;
+use App\TaskManagement\Behaviors\PreventTamperingOtherUsersTasks;
 
 class UserOwnsTask
 {

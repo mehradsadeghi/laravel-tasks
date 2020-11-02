@@ -15,12 +15,13 @@
                     </div>
                     <div class="panel-body">
 
-                        {!! Form::model($task, array('action' => array('TasksController@update', $task->id), 'method' => 'PUT')) !!}
-
+                        <form action="{!! route('tasks.update', $task->id) !!}" method="post">
+                            @method('put')
+                            @csrf
                             <div class="form-group row">
                                 {!! Form::label('name', 'Task Name', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::text('name', null, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
+                                    {!! Form::text('name', $task->name, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
                                 </div>
                             </div>
 
@@ -28,27 +29,33 @@
                             <div class="form-group row">
                                 {!! Form::label('description', 'Task Description', array('class' => 'col-sm-3 col-sm-offset-1 control-label text-right')) !!}
                                 <div class="col-sm-6">
-                                    {!! Form::textarea('description', null, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
+                                    {!! Form::textarea('description', $task->description, array('class' => 'form-control', 'disabled' => 'disabled')) !!}
                                 </div>
                             </div>
 
-
-                            <!-- Task Status -->
-
                             <div class="form-group row">
-                                <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Status</label>
+                                <div class="col-sm-6">
+                                    @php
+                                        $states = [
+                                            'done' => 'Done :)',
+                                            'doing' => 'Doing...',
+                                            'failed' => 'Failed :(',
+                                            'skipped' => 'Skipped :|',
+                                        ];
+                                    @endphp
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="status" class="col-sm-3 col-sm-offset-1 control-label text-right">Change Status from "{!! $states[$state] ?? 'Not Started' !!}" to:</label>
+
                                 <div class="col-sm-6">
                                     <div class="select">
                                         <label for="status">
-
-                                            {!! Form::select('state',
-                                            [
-                                                'not_started' => 'Not Started',
-                                                'done' => 'Done   :)',
-                                                'doing' => 'Doing...',
-                                                'failed' => 'Failed   :(',
-                                                'wont_do' => 'will not try  :|',
-                                            ],  optional(tempTags($task)->getActiveTag('state'))->getPayload('value'), ['class' => 'form-control']) !!}
+                                            @php
+                                                unset($states[$state]);
+                                            @endphp
+                                            {!! Form::select('state', $states, $state, ['class' => 'form-control']) !!}
                                         </label>
                                     </div>
                                 </div>
@@ -72,7 +79,7 @@
                         </a>
 
                         {!! Form::open(array('class' => 'form-inline pull-right', 'method' => 'DELETE', 'route' => array('tasks.destroy', $task->id))) !!}
-                            {{ method_field('DELETE') }}
+                            @method('DELETE')
                             {{Form::button('<span class="fa fa-trash fa-fw" aria-hidden="true"></span> <span class="hidden-xxs">Delete</span> <span class="hidden-sm hidden-xs">Task</span>', array('type' => 'submit', 'class' => 'btn btn-danger'))}}
                         {!! Form::close() !!}
 

@@ -1,14 +1,12 @@
 <?php
 
-
-namespace App\Behaviors;
-
+namespace App\TaskManagement\Behaviors;
 
 use Imanghafoori\HeyMan\Facades\HeyMan;
 
 class AuthenticateTasks
 {
-    static function handle()
+    static function install()
     {
         HeyMan::onRoute('tasks.*')
             ->checkAuth()
